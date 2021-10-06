@@ -47,6 +47,10 @@ public class ImageDataRecyclerAdapter extends RecyclerView.Adapter<ImageDataRecy
             String imageUrl = imageData.getPreviewUrl();
             Glide.with(holder.itemView).load(imageUrl).into(holder.imageDataView);
         }
+
+        if(imageData.getTitle() != null){
+            holder.imageTitleTextView.setText(imageData.getTitle());
+        }
     }
 
     @Override
@@ -68,5 +72,6 @@ public class ImageDataRecyclerAdapter extends RecyclerView.Adapter<ImageDataRecy
 
     public void setImageDataList(List<ImageData> imageDataList) {
         this.imageDataList = imageDataList;
+        notifyDataSetChanged();
     }
 }
