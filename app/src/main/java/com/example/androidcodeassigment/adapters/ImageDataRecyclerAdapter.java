@@ -65,4 +65,8 @@ public class ImageDataRecyclerAdapter extends RecyclerView.Adapter<ImageDataRecy
             imageTitleTextView = itemView.findViewById(R.id.recyclerview_item_title_textview);
         }
     }
+
+    public void setImageDataList(List<ImageData> imageDataList) {
+        this.imageDataList = imageDataList;
+    }
 }
