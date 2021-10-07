@@ -3,10 +3,14 @@ package com.example.androidcodeassigment.fragments;
 import static com.example.androidcodeassigment.utils.constants.NUMBER_OF_IMAGES_PER_PAGE;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,12 +34,12 @@ import com.google.android.material.textfield.TextInputEditText;
 public class SearchImageFragment extends Fragment {
     private ImageDataViewModel imageDataViewModel;
     private ImageDataRecyclerAdapter adapter;
-    private TextInputEditText searchInputEditText;
-    private Button searchButton;
+    private EditText searchInputEditText;
+    private ImageButton searchButton;
     private TextView searchResultTextView;
     private ProgressBar loadingProgressBar;
     private NestedScrollView nestedScrollView;
-
+    private TextView emptyResultTextView;
     private int count;
     private static Integer CURRENT_PAGE = 1;
     private Integer total_result = 0;
@@ -52,6 +56,13 @@ public class SearchImageFragment extends Fragment {
                     adapter.setImageDataList(imageDataResponse.getImageDataList());
                     searchResultTextView.setText(imageDataResponse.getTotal() + " results found");
                     total_result = Integer.parseInt(imageDataResponse.getTotal());
+                    if(imageDataResponse.getImageDataList().size() == 0){
+                        emptyResultTextView.setVisibility(View.VISIBLE);
+                    }
+                }
+                else {
+                    searchResultTextView.setVisibility(View.VISIBLE);
+                    emptyResultTextView.setVisibility(View.INVISIBLE);
                 }
                 //hide progressbar on showing result
                 loadingProgressBar.setVisibility(View.INVISIBLE);
@@ -71,9 +82,11 @@ public class SearchImageFragment extends Fragment {
         loadingProgressBar = view.findViewById(R.id.more_loading_progressbar);
         searchResultTextView = view.findViewById(R.id.search_results_textview);
         searchInputEditText = view.findViewById(R.id.image_search_text_input_edittext);
-        searchButton = view.findViewById(R.id.image_search_button);
+        searchButton = view.findViewById(R.id.image_search_image_button);
         nestedScrollView = view.findViewById(R.id.nested_scrollview);
+        emptyResultTextView = view.findViewById(R.id.empty_result_text_view);
 
+        performSearch(1);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,28 +105,6 @@ public class SearchImageFragment extends Fragment {
                 }
             }
         });
-
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if(!recyclerView.canScrollVertically(1)){
-                    if(total_result > CURRENT_PAGE * NUMBER_OF_IMAGES_PER_PAGE){
-                        CURRENT_PAGE++;
-                    }
-                    performSearch(CURRENT_PAGE);
-                }
-                else if(!recyclerView.canScrollVertically(-1)){
-                    CURRENT_PAGE--;
-                }
-            }
-        });
-
         return view;
     }
 
@@ -123,5 +114,6 @@ public class SearchImageFragment extends Fragment {
         //show loading progress on fetching
         loadingProgressBar.setVisibility(View.VISIBLE);
     }
+
 
 }
