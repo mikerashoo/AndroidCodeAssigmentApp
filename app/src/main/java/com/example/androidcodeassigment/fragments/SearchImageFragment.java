@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,7 +29,7 @@ public class SearchImageFragment extends Fragment {
     private ImageDataRecyclerAdapter adapter;
     private TextInputEditText searchInputEditText;
     private Button searchButton;
-
+    private TextView searchResultTextView;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +41,7 @@ public class SearchImageFragment extends Fragment {
             public void onChanged(ImageDataResponse imageDataResponse) {
                 if(imageDataResponse != null){
                     adapter.setImageDataList(imageDataResponse.getImageDataList());
+                    searchResultTextView.setText(imageDataResponse.getTotal().toString() + " results found");
                 }
             }
         });
@@ -53,6 +55,7 @@ public class SearchImageFragment extends Fragment {
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         recyclerView.setAdapter(adapter);
 
+        searchResultTextView = view.findViewById(R.id.search_results_textview);
         searchInputEditText = view.findViewById(R.id.image_search_text_input_edittext);
         searchButton = view.findViewById(R.id.image_search_button);
         searchButton.setOnClickListener(new View.OnClickListener() {

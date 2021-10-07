@@ -1,5 +1,8 @@
 package com.example.androidcodeassigment.adapters;
 
+import static com.example.androidcodeassigment.utils.constants.IMAGE_DATA_INTENT;
+
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.androidcodeassigment.ImageDetailActivity;
 import com.example.androidcodeassigment.R;
 import com.example.androidcodeassigment.models.ImageData;
 
@@ -40,7 +44,9 @@ public class ImageDataRecyclerAdapter extends RecyclerView.Adapter<ImageDataRecy
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO show image on new activity
+                Intent intent = new Intent(v.getContext(), ImageDetailActivity.class);
+                intent.putExtra(IMAGE_DATA_INTENT, imageData.getLargeImageURL());
+                v.getContext().startActivity(intent);
             }
         });
         if(imageData.getPreviewUrl() != null){
