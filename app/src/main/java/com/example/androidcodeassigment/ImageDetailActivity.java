@@ -23,7 +23,7 @@ public class ImageDetailActivity extends AppCompatActivity {
         circularProgressDrawable.setStrokeWidth(5f);
         circularProgressDrawable.setCenterRadius(30f);
         circularProgressDrawable.start();
-        fullScreenImageView = findViewById(R.id.fullscreen_imageview);
+        fullScreenImageView = findViewById(R.id.id_image_view);
         Intent intent = getIntent();
         String imgUrl = intent.getStringExtra(IMAGE_DATA_INTENT);
         String title = intent.getStringExtra(IMAGE_TITLE_INTENT);

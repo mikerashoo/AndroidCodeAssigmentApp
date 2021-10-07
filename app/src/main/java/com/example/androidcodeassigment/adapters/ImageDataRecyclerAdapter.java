@@ -3,6 +3,7 @@ package com.example.androidcodeassigment.adapters;
 import static com.example.androidcodeassigment.utils.constants.IMAGE_DATA_INTENT;
 import static com.example.androidcodeassigment.utils.constants.IMAGE_TITLE_INTENT;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -57,7 +59,8 @@ public class ImageDataRecyclerAdapter extends RecyclerView.Adapter<ImageDataRecy
 
                 //Passing image tags to fullscreen activity
                 intent.putExtra(IMAGE_TITLE_INTENT, imageData.getTitle());
-                v.getContext().startActivity(intent);
+                ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) v.getContext(), holder.imageDataView, "image_transition");
+                v.getContext().startActivity(intent, optionsCompat.toBundle());
             }
         });
         if(imageData.getPreviewUrl() != null){
@@ -84,8 +87,7 @@ public class ImageDataRecyclerAdapter extends RecyclerView.Adapter<ImageDataRecy
         private TextView imageTitleTextView;
         public ImageDataSearchResultHolder(@NonNull View itemView) {
             super(itemView);
-
-            imageDataView = itemView.findViewById(R.id.recyclerview_item_imageview);
+            imageDataView = itemView.findViewById(R.id.id_image_view);
             imageTitleTextView = itemView.findViewById(R.id.recyclerview_item_title_textview);
         }
     }
