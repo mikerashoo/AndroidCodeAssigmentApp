@@ -39,8 +39,7 @@ public class ImageDataRepository {
             @Override
             public void onResponse(Call<ImageDataResponse> call, Response<ImageDataResponse> response) {
                 if(response.body() != null){
-                    Log.d("RESPONSE_BODY", String.valueOf(response.body()));
-                    imageDataResponseMutableLiveData.postValue(response.body());
+                    imageDataResponseMutableLiveData.setValue(response.body());
                     //TODO populate data
                 }
                 else{
