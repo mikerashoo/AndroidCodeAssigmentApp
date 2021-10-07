@@ -1,8 +1,12 @@
 package com.example.androidcodeassigment.adapters;
 
 import static com.example.androidcodeassigment.utils.constants.IMAGE_DATA_INTENT;
+import static com.example.androidcodeassigment.utils.constants.IMAGE_TITLE_INTENT;
 
 import android.content.Intent;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.BackgroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +28,9 @@ public class ImageDataRecyclerAdapter extends RecyclerView.Adapter<ImageDataRecy
 
     private List<ImageData> imageDataList = new ArrayList<>();
 
+    //To access search keyword from fragment
+    private String search_keyword = "";
+
     @NonNull
     @Override
     public ImageDataSearchResultHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -44,8 +51,12 @@ public class ImageDataRecyclerAdapter extends RecyclerView.Adapter<ImageDataRecy
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Passing large image url to fullscreen image activity
                 Intent intent = new Intent(v.getContext(), ImageDetailActivity.class);
                 intent.putExtra(IMAGE_DATA_INTENT, imageData.getLargeImageURL());
+
+                //Passing image tags to fullscreen activity
+                intent.putExtra(IMAGE_TITLE_INTENT, imageData.getTitle());
                 v.getContext().startActivity(intent);
             }
         });
@@ -56,6 +67,9 @@ public class ImageDataRecyclerAdapter extends RecyclerView.Adapter<ImageDataRecy
 
         if(imageData.getTitle() != null){
             holder.imageTitleTextView.setText(imageData.getTitle());
+            if(search_keyword != ""){
+                setHighLightedText(holder.imageTitleTextView, search_keyword);
+            }
         }
     }
 
@@ -79,5 +93,31 @@ public class ImageDataRecyclerAdapter extends RecyclerView.Adapter<ImageDataRecy
     public void setImageDataList(List<ImageData> imageDataList) {
         this.imageDataList = imageDataList;
         notifyDataSetChanged();
+    }
+
+    public void setSearchKeyword(String search_keyword) {
+        this.search_keyword = search_keyword;
+    }
+
+    /**
+     * use this method to highlight a text in TextView
+     *
+     * @param tv              TextView or Edittext or Button (or derived from TextView)
+     * @param textToHighlight Text to highlight
+     */
+    public void setHighLightedText(TextView tv, String textToHighlight) {
+        String tvt = tv.getText().toString();
+        int ofe = tvt.indexOf(textToHighlight, 0);
+        Spannable wordToSpan = new SpannableString(tv.getText());
+        for (int ofs = 0; ofs < tvt.length() && ofe != -1; ofs = ofe + 1) {
+            ofe = tvt.indexOf(textToHighlight, ofs);
+            if (ofe == -1)
+                break;
+            else {
+                // set color here
+                wordToSpan.setSpan(new BackgroundColorSpan(0xFFFFFF00), ofe, ofe + textToHighlight.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                tv.setText(wordToSpan, TextView.BufferType.SPANNABLE);
+            }
+        }
     }
 }
