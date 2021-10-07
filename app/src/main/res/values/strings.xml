@@ -6,4 +6,6 @@
     <string name="search_title">Search image</string>
     <string name="search_hint">Search image</string>
     <string name="empty_list">No results found. Please try again!</string>
+    <string name="error_notification">It seems problem connecting to server. Please try again!</string>
+    <string name="try_again">Try again</string>
 </resources>

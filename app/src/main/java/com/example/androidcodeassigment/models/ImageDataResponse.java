@@ -20,6 +20,8 @@ public class ImageDataResponse {
     @Expose
     private List<ImageData> imageDataList = null;
 
+    private Throwable error;
+
     public String getTotal() {
         return total;
     }
@@ -42,5 +44,13 @@ public class ImageDataResponse {
 
     public void setImageDataList(List<ImageData> imageDataList) {
         this.imageDataList = imageDataList;
+    }
+
+    public Throwable getError() {
+        return error;
+    }
+
+    public void setError(Throwable error) {
+        this.error = error;
     }
 }

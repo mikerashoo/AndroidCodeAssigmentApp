@@ -58,10 +58,47 @@
                 android:src="@drawable/ic_baseline_search_24" />
         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/image_search_results_recyclerView"
+        <LinearLayout
+            android:id="@+id/network_error_notification_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingHorizontal="50dp"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_network_check_24" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/design_default_color_error"
+                android:text="@string/error_notification"
+                />
+            <Button
+                android:id="@+id/try_again_button"
+                android:text="@string/try_again"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/image_search_results_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <ProgressBar
+                android:id="@+id/more_loading_progressbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="invisible" />
+        </FrameLayout>
 
 
         <TextView
@@ -74,10 +111,7 @@
             android:layout_marginTop="40dp"
             android:visibility="invisible"
             />
-        <ProgressBar
-            android:id="@+id/more_loading_progressbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="invisible" />
+
+
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

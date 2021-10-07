@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,8 +41,10 @@ public class SearchImageFragment extends Fragment {
     private ProgressBar loadingProgressBar;
     private NestedScrollView nestedScrollView;
     private TextView emptyResultTextView;
+    private LinearLayout networkErrorNotificationLinearLayout;
+    private Button tryAgainButton;
+
     private int count;
-    private static Integer CURRENT_PAGE = 1;
     private Integer total_result = 0;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,16 +55,17 @@ public class SearchImageFragment extends Fragment {
         imageDataViewModel.getImageDataResponseLiveData().observe(this, new Observer<ImageDataResponse>() {
             @Override
             public void onChanged(ImageDataResponse imageDataResponse) {
-                if(imageDataResponse != null){
+                if(imageDataResponse.getError() == null){
                     adapter.setImageDataList(imageDataResponse.getImageDataList());
                     searchResultTextView.setText(imageDataResponse.getTotal() + " results found");
                     total_result = Integer.parseInt(imageDataResponse.getTotal());
+                    searchResultTextView.setVisibility(View.VISIBLE);
                     if(imageDataResponse.getImageDataList().size() == 0){
                         emptyResultTextView.setVisibility(View.VISIBLE);
                     }
                 }
                 else {
-                    searchResultTextView.setVisibility(View.VISIBLE);
+                    networkErrorNotificationLinearLayout.setVisibility(View.VISIBLE);
                     emptyResultTextView.setVisibility(View.INVISIBLE);
                 }
                 //hide progressbar on showing result
@@ -85,12 +89,20 @@ public class SearchImageFragment extends Fragment {
         searchButton = view.findViewById(R.id.image_search_image_button);
         nestedScrollView = view.findViewById(R.id.nested_scrollview);
         emptyResultTextView = view.findViewById(R.id.empty_result_text_view);
+        networkErrorNotificationLinearLayout = view.findViewById(R.id.network_error_notification_layout);
+        tryAgainButton = view.findViewById(R.id.try_again_button);
 
         performSearch(1);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                performSearch(1);
+                String keyword = searchInputEditText.getEditableText().toString();
+                if(keyword.isEmpty()){
+                    Toast.makeText(getContext(), "Please enter keyword", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    performSearch(1);
+                }
             }
         });
 
@@ -105,6 +117,14 @@ public class SearchImageFragment extends Fragment {
                 }
             }
         });
+
+        tryAgainButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                performSearch(1);
+            }
+        });
+
         return view;
     }
 
@@ -113,6 +133,8 @@ public class SearchImageFragment extends Fragment {
         imageDataViewModel.searchImagesData(keyword, page, NUMBER_OF_IMAGES_PER_PAGE);
         //show loading progress on fetching
         loadingProgressBar.setVisibility(View.VISIBLE);
+        networkErrorNotificationLinearLayout.setVisibility(View.GONE);
+        emptyResultTextView.setVisibility(View.GONE);
     }
 
 
